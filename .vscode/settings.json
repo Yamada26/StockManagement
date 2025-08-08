@@ -1,4 +1,6 @@
 {
-  "eslint.useFlatConfig": true,
-  "eslint.validate": ["typescript"]
+  "eslint.enable": true,
+  "eslint.useFlatConfig": false,
+  "eslint.validate": ["typescript"], 
+  "eslint.run": "onType"
 }

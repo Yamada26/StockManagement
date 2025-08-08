@@ -1,16 +1,18 @@
-import { isEqual } from "lodash";
+import { isEqual } from 'lodash';
 
-export abstract class ValueObject<T, U> {
-  // @ts-expect-error
+export default abstract class ValueObject<T, U> {
+  // @ts-expect-error: Used to enforce generic type U for type safety, not for runtime use
   private _type: U;
+
   protected readonly _value: T;
 
   constructor(value: T) {
-    this.validate(value);
     this._value = value;
+
+    this.validate();
   }
 
-  protected abstract validate(value: T): void;
+  protected abstract validate(): void;
 
   get value(): T {
     return this._value;

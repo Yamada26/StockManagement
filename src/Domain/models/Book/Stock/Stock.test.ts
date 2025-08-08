@@ -1,7 +1,7 @@
-import { Stock } from './Stock';
-import { QuantityAvailable } from './QuantityAvailable/QuantityAvailable';
+import Stock from './Stock';
+import QuantityAvailable from './QuantityAvailable/QuantityAvailable';
 import { Status, StatusEnum } from './Status/Status';
-import { StockId } from './StockId/StockId';
+import StockId from './StockId/StockId';
 
 // nanoid() をモックする
 jest.mock('nanoid', () => ({
@@ -18,13 +18,13 @@ describe('Stock', () => {
       const stock = Stock.create();
 
       expect(
-        stock.id.equals(new StockId('testIdWithExactLength'))
+        stock.id.equals(new StockId('testIdWithExactLength')),
       ).toBeTruthy();
       expect(
-        stock.quantityAvailable.equals(new QuantityAvailable(0))
+        stock.quantityAvailable.equals(new QuantityAvailable(0)),
       ).toBeTruthy();
       expect(
-        stock.status.equals(new Status(StatusEnum.OutOfStock))
+        stock.status.equals(new Status(StatusEnum.OutOfStock)),
       ).toBeTruthy();
     });
   });
@@ -41,7 +41,7 @@ describe('Stock', () => {
       const stock = Stock.reconstruct(
         stockId,
         quantityAvailable,
-        notOnSaleStatus
+        notOnSaleStatus,
       );
 
       expect(() => stock.delete()).not.toThrow();
@@ -54,7 +54,7 @@ describe('Stock', () => {
       stock.increaseQuantity(5);
 
       expect(
-        stock.quantityAvailable.equals(new QuantityAvailable(105))
+        stock.quantityAvailable.equals(new QuantityAvailable(105)),
       ).toBeTruthy();
     });
 
@@ -62,7 +62,7 @@ describe('Stock', () => {
       const stock = Stock.reconstruct(stockId, quantityAvailable, status);
 
       expect(() => stock.increaseQuantity(-1)).toThrow(
-        '増加量は0以上でなければなりません。'
+        '増加量は0以上でなければなりません。',
       );
     });
   });
@@ -73,7 +73,7 @@ describe('Stock', () => {
       stock.decreaseQuantity(5);
 
       expect(
-        stock.quantityAvailable.equals(new QuantityAvailable(95))
+        stock.quantityAvailable.equals(new QuantityAvailable(95)),
       ).toBeTruthy();
     });
 
@@ -81,7 +81,7 @@ describe('Stock', () => {
       const stock = Stock.reconstruct(stockId, quantityAvailable, status);
 
       expect(() => stock.decreaseQuantity(-1)).toThrow(
-        '減少量は0以上でなければなりません。'
+        '減少量は0以上でなければなりません。',
       );
     });
 
@@ -96,10 +96,10 @@ describe('Stock', () => {
       stock.decreaseQuantity(100);
 
       expect(
-        stock.quantityAvailable.equals(new QuantityAvailable(0))
+        stock.quantityAvailable.equals(new QuantityAvailable(0)),
       ).toBeTruthy();
       expect(
-        stock.status.equals(new Status(StatusEnum.OutOfStock))
+        stock.status.equals(new Status(StatusEnum.OutOfStock)),
       ).toBeTruthy();
     });
 
@@ -108,7 +108,7 @@ describe('Stock', () => {
       stock.decreaseQuantity(90);
 
       expect(
-        stock.quantityAvailable.equals(new QuantityAvailable(10))
+        stock.quantityAvailable.equals(new QuantityAvailable(10)),
       ).toBeTruthy();
       expect(stock.status.equals(new Status(StatusEnum.LowStock))).toBeTruthy();
     });
