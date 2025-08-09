@@ -1,7 +1,6 @@
 {
   "ts-node": {
     "require": ["tsconfig-paths/register"]
-    // ts-nodeがtsconfigのpathsを解決できるようにします。
   },
   "compilerOptions": {
     "outDir": "./dist",
@@ -11,7 +10,7 @@
     "noUnusedParameters": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["./src/*"]
+      "*": ["src/*"]
     },
     "esModuleInterop": true
   },
