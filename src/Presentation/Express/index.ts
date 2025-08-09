@@ -7,6 +7,7 @@ import {
 import PrismaBookRepository from 'Infrastructure/Prisma/Book/PrismaBookRepository';
 import PrismaClientManager from 'Infrastructure/Prisma/PrismaClientManager';
 import PrismaTransactionManager from 'Infrastructure/Prisma/PrismaTransactionManager';
+import GetBookApplicationService from 'Application/Book/GetBookApplicationService/GetBookApplicationService';
 
 const app = express();
 const port = 3000;
@@ -21,7 +22,7 @@ app.listen(port, () => {
 
 // JSON形式のリクエストボディを正しく解析するために必要
 app.use(express.json());
-app.post('/book', async (req, res) => {
+app.post('/books', async (req, res) => {
   try {
     const requestBody = req.body as {
       isbn: string;
@@ -45,6 +46,28 @@ app.post('/book', async (req, res) => {
     res.status(200).json({ message: 'success' });
   } catch (error) {
     // 実際はエラーを解析し、詳細なレスポンスを返す。また、ロギングなどを行う。
+    res.status(500).json({ message: (error as Error).message });
+  }
+});
+app.get('/books/:isbn', async (req, res) => {
+  try {
+    const { isbn } = req.params;
+
+    const clientManager = new PrismaClientManager();
+    const bookRepository = new PrismaBookRepository(clientManager);
+    const getBookApplicationService = new GetBookApplicationService(
+      bookRepository,
+    );
+
+    const book = await getBookApplicationService.execute(isbn);
+
+    if (!book) {
+      res.status(404).json({ message: 'Book not found' });
+      return;
+    }
+
+    res.status(200).json(book);
+  } catch (error) {
     res.status(500).json({ message: (error as Error).message });
   }
 });

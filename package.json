@@ -8,7 +8,9 @@
   "scripts": {
     "test": "npx jest",
     "lint": "npx eslint src --ext .ts",
-    "migrate": "npx prisma migrate dev --name init"
+    "migrate": "npx prisma migrate dev --name init",
+    "dev": "npx ts-node  src/Presentation/Express/index.ts",
+    "prisma": "npx prisma studio"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
