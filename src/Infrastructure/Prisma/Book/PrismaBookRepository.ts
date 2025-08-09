@@ -1,3 +1,4 @@
+import { injectable, inject } from 'tsyringe';
 import Book from 'Domain/models/Book/Book';
 import BookId from 'Domain/models/Book/BookId/BookId';
 import IBookRepository from 'Domain/models/Book/IBookRepository';
@@ -11,10 +12,13 @@ import PrismaClientManager from 'Infrastructure/Prisma/PrismaClientManager';
 
 import { Status as PrismaStatus } from '@prisma/client';
 
+@injectable()
 export default class PrismaBookRepository implements IBookRepository {
   private clientManager: PrismaClientManager;
 
-  public constructor(clientManager: PrismaClientManager) {
+  public constructor(
+    @inject('IDataAccessClientManager') clientManager: PrismaClientManager,
+  ) {
     this.clientManager = clientManager;
   }
 

@@ -1,11 +1,15 @@
+import { injectable, inject } from 'tsyringe';
 import BookId from 'Domain/models/Book/BookId/BookId';
 import IBookRepository from 'Domain/models/Book/IBookRepository';
 import BookDTO from 'Application/Book/BookDTO';
 
+@injectable()
 export default class GetBookApplicationService {
   private bookRepository: IBookRepository;
 
-  public constructor(bookRepository: IBookRepository) {
+  public constructor(
+    @inject('IBookRepository') bookRepository: IBookRepository,
+  ) {
     this.bookRepository = bookRepository;
   }
 

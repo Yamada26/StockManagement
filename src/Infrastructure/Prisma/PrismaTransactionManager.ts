@@ -1,11 +1,15 @@
+import { injectable, inject } from 'tsyringe';
 import { ITransactionManager } from '../../Application/shared/ITransactionManager';
 import prisma from './prismaClient';
 import PrismaClientManager from './PrismaClientManager';
 
+@injectable()
 export default class PrismaTransactionManager implements ITransactionManager {
   private clientManager: PrismaClientManager;
 
-  public constructor(clientManager: PrismaClientManager) {
+  public constructor(
+    @inject('IDataAccessClientManager') clientManager: PrismaClientManager,
+  ) {
     this.clientManager = clientManager;
   }
 

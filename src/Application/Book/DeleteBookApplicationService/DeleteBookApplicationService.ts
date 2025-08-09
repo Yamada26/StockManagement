@@ -1,3 +1,4 @@
+import { injectable, inject } from 'tsyringe';
 import { ITransactionManager } from 'Application/shared/ITransactionManager';
 import BookId from 'Domain/models/Book/BookId/BookId';
 import IBookRepository from 'Domain/models/Book/IBookRepository';
@@ -5,14 +6,16 @@ import IBookRepository from 'Domain/models/Book/IBookRepository';
 export type DeleteBookCommand = {
   bookId: string;
 };
+
+@injectable()
 export class DeleteBookApplicationService {
   private bookRepository: IBookRepository;
 
   private transactionManager: ITransactionManager;
 
   public constructor(
-    bookRepository: IBookRepository,
-    transactionManager: ITransactionManager,
+    @inject('IBookRepository') bookRepository: IBookRepository,
+    @inject('ITransactionManager') transactionManager: ITransactionManager,
   ) {
     this.bookRepository = bookRepository;
     this.transactionManager = transactionManager;

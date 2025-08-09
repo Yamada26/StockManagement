@@ -1,3 +1,4 @@
+import { injectable, inject } from 'tsyringe';
 import { ITransactionManager } from 'Application/shared/ITransactionManager';
 import Book from 'Domain/models/Book/Book';
 import BookId from 'Domain/models/Book/BookId/BookId';
@@ -12,14 +13,15 @@ export type RegisterBookCommand = {
   priceAmount: number;
 };
 
+@injectable()
 export class RegisterBookApplicationService {
   private bookRepository: IBookRepository;
 
   private transactionManager: ITransactionManager;
 
   public constructor(
-    bookRepository: IBookRepository,
-    transactionManager: ITransactionManager,
+    @inject('IBookRepository') bookRepository: IBookRepository,
+    @inject('ITransactionManager') transactionManager: ITransactionManager,
   ) {
     this.bookRepository = bookRepository;
     this.transactionManager = transactionManager;
