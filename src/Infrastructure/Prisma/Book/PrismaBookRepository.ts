@@ -7,16 +7,15 @@ import { Status, StatusEnum } from 'Domain/models/Book/Stock/Status/Status';
 import Stock from 'Domain/models/Book/Stock/Stock';
 import StockId from 'Domain/models/Book/Stock/StockId/StockId';
 import Title from 'Domain/models/Book/Title/Title';
+import PrismaClientManager from 'Infrastructure/Prisma/PrismaClientManager';
 
-import { PrismaClient, Status as PrismaStatus } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Status as PrismaStatus } from '@prisma/client';
 
 export default class PrismaBookRepository implements IBookRepository {
-  private readonly prisma: PrismaClient;
+  private clientManager: PrismaClientManager;
 
-  public constructor() {
-    this.prisma = prisma;
+  public constructor(clientManager: PrismaClientManager) {
+    this.clientManager = clientManager;
   }
 
   // DBのstatusの型とドメイン層のStatusの型が異なるので変換する
@@ -49,7 +48,9 @@ export default class PrismaBookRepository implements IBookRepository {
   }
 
   public async save(book: Book) {
-    await this.prisma.book.create({
+    const client = this.clientManager.getClient();
+
+    await client.book.create({
       data: {
         id: book.id.value,
         title: book.title.value,
@@ -66,7 +67,9 @@ export default class PrismaBookRepository implements IBookRepository {
   }
 
   public async update(book: Book) {
-    await this.prisma.book.update({
+    const client = this.clientManager.getClient();
+
+    await client.book.update({
       where: {
         id: book.id.value,
       },
@@ -84,7 +87,9 @@ export default class PrismaBookRepository implements IBookRepository {
   }
 
   public async delete(bookId: BookId) {
-    await this.prisma.book.delete({
+    const client = this.clientManager.getClient();
+
+    await client.book.delete({
       where: {
         id: bookId.value,
       },
@@ -92,7 +97,9 @@ export default class PrismaBookRepository implements IBookRepository {
   }
 
   public async find(bookId: BookId): Promise<Book | null> {
-    const data = await this.prisma.book.findUnique({
+    const client = this.clientManager.getClient();
+
+    const data = await client.book.findUnique({
       where: {
         id: bookId.value,
       },
