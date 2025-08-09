@@ -2,9 +2,9 @@ import ValueObject from 'Domain/models/shared/ValueObject';
 
 type TitleValue = string;
 export default class Title extends ValueObject<TitleValue, 'Title'> {
-  static readonly MAX_LENGTH = 1000;
+  public static readonly MAX_LENGTH = 1000;
 
-  static readonly MIN_LENGTH = 1;
+  public static readonly MIN_LENGTH = 1;
 
   protected validate(): void {
     if (

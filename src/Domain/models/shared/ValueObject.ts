@@ -6,7 +6,7 @@ export default abstract class ValueObject<T, U> {
 
   protected readonly _value: T;
 
-  constructor(value: T) {
+  public constructor(value: T) {
     this._value = value;
 
     this.validate();
@@ -14,11 +14,11 @@ export default abstract class ValueObject<T, U> {
 
   protected abstract validate(): void;
 
-  get value(): T {
+  public get value(): T {
     return this._value;
   }
 
-  equals(other: ValueObject<T, U>): boolean {
+  public equals(other: ValueObject<T, U>): boolean {
     return isEqual(this._value, other._value);
   }
 }

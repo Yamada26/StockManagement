@@ -22,11 +22,11 @@ export default class Book {
     this._stock = stock;
   }
 
-  static create(id: BookId, title: Title, price: Price): Book {
+  public static create(id: BookId, title: Title, price: Price): Book {
     return new Book(id, title, price, Stock.create());
   }
 
-  static reconstruct(
+  public static reconstruct(
     id: BookId,
     title: Title,
     price: Price,
@@ -35,54 +35,54 @@ export default class Book {
     return new Book(id, title, price, stock);
   }
 
-  delete(): void {
+  public delete(): void {
     this._stock.delete();
   }
 
-  changeTitle(title: Title): void {
+  public changeTitle(title: Title): void {
     this._title = title;
   }
 
-  changePrice(price: Price): void {
+  public changePrice(price: Price): void {
     this._price = price;
   }
 
-  isSaleable(): boolean {
+  public isSaleable(): boolean {
     return (
       this._stock.quantityAvailable.value > 0 &&
       this._stock.status.value !== StatusEnum.OutOfStock
     );
   }
 
-  increaseStock(amount: number): void {
+  public increaseStock(amount: number): void {
     this._stock.increaseQuantity(amount);
   }
 
-  decreaseStock(amount: number): void {
+  public decreaseStock(amount: number): void {
     this._stock.decreaseQuantity(amount);
   }
 
-  get id(): BookId {
+  public get id(): BookId {
     return this._id;
   }
 
-  get title(): Title {
+  public get title(): Title {
     return this._title;
   }
 
-  get price(): Price {
+  public get price(): Price {
     return this._price;
   }
 
-  get stockId(): StockId {
+  public get stockId(): StockId {
     return this._stock.id;
   }
 
-  get quantityAvailable(): QuantityAvailable {
+  public get quantityAvailable(): QuantityAvailable {
     return this._stock.quantityAvailable;
   }
 
-  get status(): Status {
+  public get status(): Status {
     return this._stock.status;
   }
 }

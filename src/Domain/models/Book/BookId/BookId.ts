@@ -1,9 +1,9 @@
 import ValueObject from 'Domain/models/shared/ValueObject';
 
 export default class BookId extends ValueObject<string, 'BookId'> {
-  static MAX_LENGTH = 13;
+  public static MAX_LENGTH = 13;
 
-  static MIN_LENGTH = 10;
+  public static MIN_LENGTH = 10;
 
   protected validate(): void {
     if (
@@ -30,7 +30,7 @@ export default class BookId extends ValueObject<string, 'BookId'> {
     return this._value.startsWith('978') && this._value.length === 13;
   }
 
-  toISBN(): string {
+  public toISBN(): string {
     if (this._value.length === 10) {
       // ISBNが10桁の場合の、'ISBN' フォーマットに変換します。
       const groupIdentifier = this._value.substring(0, 1); // 国コードなど（1桁）

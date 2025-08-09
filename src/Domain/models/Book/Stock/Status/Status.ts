@@ -15,7 +15,7 @@ export class Status extends ValueObject<StatusValue, 'Status'> {
     }
   }
 
-  toLabel(): StatusLabel {
+  public toLabel(): StatusLabel {
     switch (this._value) {
       case StatusEnum.InStock:
         return '在庫あり';

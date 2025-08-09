@@ -7,19 +7,19 @@ export default class InMemoryBookRepository implements IBookRepository {
     [id: string]: Book;
   } = {};
 
-  async save(book: Book) {
+  public async save(book: Book) {
     this.DB[book.id.value] = book;
   }
 
-  async update(book: Book) {
+  public async update(book: Book) {
     this.DB[book.id.value] = book;
   }
 
-  async delete(bookId: BookId) {
+  public async delete(bookId: BookId) {
     delete this.DB[bookId.value];
   }
 
-  async find(bookId: BookId): Promise<Book | null> {
+  public async find(bookId: BookId): Promise<Book | null> {
     const book = Object.entries(this.DB).find(
       ([id]) => bookId.value === id.toString(),
     );

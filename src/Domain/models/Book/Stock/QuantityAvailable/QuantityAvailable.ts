@@ -5,9 +5,9 @@ export default class QuantityAvailable extends ValueObject<
   QuantityAvailableValue,
   'QuantityAvailable'
 > {
-  static readonly MAX: number = 1000000;
+  public static readonly MAX: number = 1000000;
 
-  static readonly MIN: number = 0;
+  public static readonly MIN: number = 0;
 
   protected validate(): void {
     if (
@@ -20,13 +20,13 @@ export default class QuantityAvailable extends ValueObject<
     }
   }
 
-  increment(amount: number): QuantityAvailable {
+  public increment(amount: number): QuantityAvailable {
     const newValue = this._value + amount;
 
     return new QuantityAvailable(newValue);
   }
 
-  decrement(amount: number): QuantityAvailable {
+  public decrement(amount: number): QuantityAvailable {
     const newValue = this._value - amount;
 
     return new QuantityAvailable(newValue);

@@ -27,7 +27,7 @@ export default class Stock {
     this._status = status;
   }
 
-  static create(): Stock {
+  public static create(): Stock {
     const defaultId = new StockId();
     const defaultQuantityAvailable = new QuantityAvailable(0);
     const defaultStatus = new Status(StatusEnum.OutOfStock);
@@ -46,7 +46,7 @@ export default class Stock {
   }
 
   // 在庫数を増やす
-  increaseQuantity(amount: number): void {
+  public increaseQuantity(amount: number): void {
     if (amount < 0) {
       throw new Error('増加量は0以上でなければなりません。');
     }
@@ -61,7 +61,7 @@ export default class Stock {
   }
 
   // 在庫数を減らす
-  decreaseQuantity(amount: number): void {
+  public decreaseQuantity(amount: number): void {
     if (amount < 0) {
       throw new Error('減少量は0以上でなければなりません。');
     }
@@ -85,7 +85,7 @@ export default class Stock {
   }
 
   // エンティティの再構築
-  static reconstruct(
+  public static reconstruct(
     id: StockId,
     quantityAvailable: QuantityAvailable,
     status: Status,
@@ -93,15 +93,15 @@ export default class Stock {
     return new Stock(id, quantityAvailable, status);
   }
 
-  get id(): StockId {
+  public get id(): StockId {
     return this._id;
   }
 
-  get quantityAvailable(): QuantityAvailable {
+  public get quantityAvailable(): QuantityAvailable {
     return this._quantityAvailable;
   }
 
-  get status(): Status {
+  public get status(): Status {
     return this._status;
   }
 }

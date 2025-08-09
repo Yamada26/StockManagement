@@ -6,9 +6,9 @@ interface PriceValue {
 }
 
 export default class Price extends ValueObject<PriceValue, 'Price'> {
-  static readonly MAX = 1000000;
+  public static readonly MAX = 1000000;
 
-  static readonly MIN = 1;
+  public static readonly MIN = 1;
 
   protected validate(): void {
     if (this.value.currency !== 'JPY') {
@@ -22,11 +22,11 @@ export default class Price extends ValueObject<PriceValue, 'Price'> {
     }
   }
 
-  get amount(): PriceValue['amount'] {
+  public get amount(): PriceValue['amount'] {
     return this.value.amount;
   }
 
-  get currency(): PriceValue['currency'] {
+  public get currency(): PriceValue['currency'] {
     return this.value.currency;
   }
 }
