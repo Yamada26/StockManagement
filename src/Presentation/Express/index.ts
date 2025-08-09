@@ -33,14 +33,6 @@ app.post('/books', async (req, res) => {
       priceAmount: number;
     };
 
-    // const clientManager = new PrismaClientManager();
-    // const transactionManager = new PrismaTransactionManager(clientManager);
-    // const bookRepository = new PrismaBookRepository(clientManager);
-    // const registerBookApplicationService = new RegisterBookApplicationService(
-    //   bookRepository,
-    //   transactionManager,
-    // );
-
     const registerBookApplicationService = container.resolve(
       RegisterBookApplicationService,
     );
