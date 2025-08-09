@@ -3,7 +3,7 @@ import BookId from 'Domain/models/Book/BookId/BookId';
 import IBookRepository from 'Domain/models/Book/IBookRepository';
 
 export default class InMemoryBookRepository implements IBookRepository {
-  public DB: {
+  private DB: {
     [id: string]: Book;
   } = {};
 
