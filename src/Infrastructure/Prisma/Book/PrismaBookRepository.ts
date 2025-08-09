@@ -51,12 +51,12 @@ export default class PrismaBookRepository implements IBookRepository {
   public async save(book: Book) {
     await this.prisma.book.create({
       data: {
-        bookId: book.id.value,
+        id: book.id.value,
         title: book.title.value,
         priceAmount: book.price.value.amount,
         stock: {
           create: {
-            stockId: book.stockId.value,
+            id: book.stockId.value,
             quantityAvailable: book.quantityAvailable.value,
             status: PrismaBookRepository.statusDataMapper(book.status.value),
           },
@@ -68,7 +68,7 @@ export default class PrismaBookRepository implements IBookRepository {
   public async update(book: Book) {
     await this.prisma.book.update({
       where: {
-        bookId: book.id.value,
+        id: book.id.value,
       },
       data: {
         title: book.title.value,
@@ -86,7 +86,7 @@ export default class PrismaBookRepository implements IBookRepository {
   public async delete(bookId: BookId) {
     await this.prisma.book.delete({
       where: {
-        bookId: bookId.value,
+        id: bookId.value,
       },
     });
   }
@@ -94,7 +94,7 @@ export default class PrismaBookRepository implements IBookRepository {
   public async find(bookId: BookId): Promise<Book | null> {
     const data = await this.prisma.book.findUnique({
       where: {
-        bookId: bookId.value,
+        id: bookId.value,
       },
       include: {
         stock: true,
@@ -106,11 +106,11 @@ export default class PrismaBookRepository implements IBookRepository {
     }
 
     return Book.reconstruct(
-      new BookId(data.bookId),
+      new BookId(data.id),
       new Title(data.title),
       new Price({ amount: data.priceAmount, currency: 'JPY' }),
       Stock.reconstruct(
-        new StockId(data.stock.stockId),
+        new StockId(data.stock.id),
         new QuantityAvailable(data.stock.quantityAvailable),
         PrismaBookRepository.statusEnumMapper(data.stock.status),
       ),
