@@ -6,4 +6,5 @@ export default interface IBookRepository {
   update(book: Book): Promise<void>;
   delete(id: BookId): Promise<void>;
   find(id: BookId): Promise<Book | null>;
+  findAll(): Promise<Book[]>;
 }

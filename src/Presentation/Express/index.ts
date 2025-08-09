@@ -10,6 +10,7 @@ import {
   RegisterBookCommand,
 } from 'Application/Book/RegisterBookApplicationService/RegisterBookApplicationService';
 import GetBookApplicationService from 'Application/Book/GetBookApplicationService/GetBookApplicationService';
+import GetAllBooksApplicationService from 'Application/Book/GetAllBooksApplicationService/GetAllBooksApplicationService';
 
 const app = express();
 const port = 3000;
@@ -56,6 +57,23 @@ app.post('/books', async (req, res) => {
   }
 });
 
+app.get('/books', async (_, res) => {
+  try {
+    const getAllBooksApplicationService = container.resolve(
+      GetAllBooksApplicationService,
+    );
+
+    const books = await getAllBooksApplicationService.execute();
+
+    const resBody = {
+      data: books,
+    };
+    res.status(200).json(resBody);
+  } catch (error) {
+    res.status(500).json({ message: (error as Error).message });
+  }
+});
+
 app.get('/books/:isbn', async (req, res) => {
   try {
     const { isbn } = req.params;
@@ -71,7 +89,10 @@ app.get('/books/:isbn', async (req, res) => {
       return;
     }
 
-    res.status(200).json(book);
+    const resBody = {
+      data: book,
+    };
+    res.status(200).json(resBody);
   } catch (error) {
     res.status(500).json({ message: (error as Error).message });
   }

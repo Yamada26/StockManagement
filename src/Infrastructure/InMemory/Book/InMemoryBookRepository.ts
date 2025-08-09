@@ -26,4 +26,8 @@ export default class InMemoryBookRepository implements IBookRepository {
 
     return book ? book[1] : null;
   }
+
+  public async findAll(): Promise<Book[]> {
+    return Object.values(this.DB);
+  }
 }

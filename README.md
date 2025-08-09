@@ -18,6 +18,7 @@
 - TS
   - strict
   - null check
+- テストは in memory ではなくスタブを使用する
 
 ## パッケージ
 

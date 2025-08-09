@@ -127,4 +127,31 @@ export default class PrismaBookRepository implements IBookRepository {
       ),
     );
   }
+
+  public async findAll(): Promise<Book[]> {
+    const client = this.clientManager.getClient();
+
+    const data = await client.book.findMany({
+      include: {
+        stock: true,
+      },
+    });
+
+    return data.map((item) => {
+      if (!item.stock) {
+        throw new Error(`Stock not found for book: ${item.id}`);
+      }
+
+      return Book.reconstruct(
+        new BookId(item.id),
+        new Title(item.title),
+        new Price({ amount: item.priceAmount, currency: 'JPY' }),
+        Stock.reconstruct(
+          new StockId(item.stock.id),
+          new QuantityAvailable(item.stock.quantityAvailable),
+          PrismaBookRepository.statusEnumMapper(item.stock.status),
+        ),
+      );
+    });
+  }
 }
