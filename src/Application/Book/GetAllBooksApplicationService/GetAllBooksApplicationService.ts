@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import IBookRepository from 'Domain/models/Book/IBookRepository';
+import { IBookRepository } from 'Domain/models/Book/IBookRepository';
 import BookDTO from 'Application/Book/BookDTO';
 
 @injectable()

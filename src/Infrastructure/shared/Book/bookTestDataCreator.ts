@@ -1,6 +1,6 @@
 import Book from 'Domain/models/Book/Book';
 import BookId from 'Domain/models/Book/BookId/BookId';
-import IBookRepository from 'Domain/models/Book/IBookRepository';
+import { IBookRepository } from 'Domain/models/Book/IBookRepository';
 import Price from 'Domain/models/Book/Price/Price';
 import QuantityAvailable from 'Domain/models/Book/Stock/QuantityAvailable/QuantityAvailable';
 import { Status, StatusEnum } from 'Domain/models/Book/Stock/Status/Status';

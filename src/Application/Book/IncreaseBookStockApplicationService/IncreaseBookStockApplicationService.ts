@@ -1,7 +1,8 @@
 import { injectable, inject } from 'tsyringe';
 import { ITransactionManager } from 'Application/shared/ITransactionManager';
 import BookId from 'Domain/models/Book/BookId/BookId';
-import IBookRepository from 'Domain/models/Book/IBookRepository';
+import { IBookRepository } from 'Domain/models/Book/IBookRepository';
+import { IDomainEventPublisher } from 'Domain/shared/DomainEvent/IDomainEventPublisher';
 
 export type IncreaseBookStockCommand = {
   bookId: string;
@@ -14,12 +15,17 @@ export class IncreaseBookStockApplicationService {
 
   private transactionManager: ITransactionManager;
 
+  private domainEventPublisher: IDomainEventPublisher;
+
   public constructor(
     @inject('IBookRepository') bookRepository: IBookRepository,
     @inject('ITransactionManager') transactionManager: ITransactionManager,
+    @inject('IDomainEventPublisher')
+    domainEventPublisher: IDomainEventPublisher,
   ) {
     this.bookRepository = bookRepository;
     this.transactionManager = transactionManager;
+    this.domainEventPublisher = domainEventPublisher;
   }
 
   public async execute(command: IncreaseBookStockCommand): Promise<void> {
@@ -32,7 +38,7 @@ export class IncreaseBookStockApplicationService {
 
       book.increaseStock(command.incrementAmount);
 
-      await this.bookRepository.update(book);
+      await this.bookRepository.update(book, this.domainEventPublisher);
     });
   }
 }

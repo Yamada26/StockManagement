@@ -5,8 +5,13 @@ import { Status, StatusEnum } from './Stock/Status/Status';
 import Stock from './Stock/Stock';
 import StockId from './Stock/StockId/StockId';
 import Title from './Title/Title';
+import DomainEventStorable from '../../shared/DomainEvent/DomainEventStorable';
+import {
+  BOOK_EVENT_NAME,
+  BookDomainEventFactory,
+} from '../../shared/DomainEvent/Book/BookDomainEventFactory';
 
-export default class Book {
+export default class Book extends DomainEventStorable {
   private readonly _id: BookId;
 
   private _title: Title;
@@ -16,6 +21,8 @@ export default class Book {
   private readonly _stock: Stock;
 
   private constructor(id: BookId, title: Title, price: Price, stock: Stock) {
+    super();
+
     this._id = id;
     this._title = title;
     this._price = price;
@@ -23,7 +30,12 @@ export default class Book {
   }
 
   public static create(id: BookId, title: Title, price: Price): Book {
-    return new Book(id, title, price, Stock.create());
+    const book = new Book(id, title, price, Stock.create());
+    book.addDomainEvent(
+      new BookDomainEventFactory(book).createEvent(BOOK_EVENT_NAME.CREATED),
+    );
+
+    return book;
   }
 
   public static reconstruct(
@@ -37,6 +49,10 @@ export default class Book {
 
   public delete(): void {
     this._stock.delete();
+
+    this.addDomainEvent(
+      new BookDomainEventFactory(this).createEvent(BOOK_EVENT_NAME.DELETED),
+    );
   }
 
   public changeTitle(title: Title): void {
@@ -60,6 +76,13 @@ export default class Book {
 
   public decreaseStock(amount: number): void {
     this._stock.decreaseQuantity(amount);
+
+    // 在庫切れになったらイベントを生成する
+    if (this.status.equals(new Status(StatusEnum.OutOfStock))) {
+      this.addDomainEvent(
+        new BookDomainEventFactory(this).createEvent(BOOK_EVENT_NAME.DEPLETED),
+      );
+    }
   }
 
   public get id(): BookId {

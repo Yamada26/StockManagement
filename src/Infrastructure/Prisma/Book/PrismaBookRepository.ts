@@ -1,7 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 import Book from 'Domain/models/Book/Book';
 import BookId from 'Domain/models/Book/BookId/BookId';
-import IBookRepository from 'Domain/models/Book/IBookRepository';
+import { IBookRepository } from 'Domain/models/Book/IBookRepository';
 import Price from 'Domain/models/Book/Price/Price';
 import QuantityAvailable from 'Domain/models/Book/Stock/QuantityAvailable/QuantityAvailable';
 import { Status, StatusEnum } from 'Domain/models/Book/Stock/Status/Status';
@@ -9,6 +9,7 @@ import Stock from 'Domain/models/Book/Stock/Stock';
 import StockId from 'Domain/models/Book/Stock/StockId/StockId';
 import Title from 'Domain/models/Book/Title/Title';
 import PrismaClientManager from 'Infrastructure/Prisma/PrismaClientManager';
+import { IDomainEventPublisher } from 'Domain/shared/DomainEvent/IDomainEventPublisher';
 
 import { Status as PrismaStatus } from '@prisma/client';
 
@@ -51,7 +52,7 @@ export default class PrismaBookRepository implements IBookRepository {
     }
   }
 
-  public async save(book: Book) {
+  public async save(book: Book, domainEventPublisher: IDomainEventPublisher) {
     const client = this.clientManager.getClient();
 
     await client.book.create({
@@ -68,9 +69,15 @@ export default class PrismaBookRepository implements IBookRepository {
         },
       },
     });
+
+    // ここでイベントをパブリッシュする
+    book.getDomainEvents().forEach((event) => {
+      domainEventPublisher.publish(event);
+    });
+    book.clearDomainEvents();
   }
 
-  public async update(book: Book) {
+  public async update(book: Book, domainEventPublisher: IDomainEventPublisher) {
     const client = this.clientManager.getClient();
 
     await client.book.update({
@@ -88,16 +95,28 @@ export default class PrismaBookRepository implements IBookRepository {
         },
       },
     });
+
+    // ここでイベントを発行する
+    book.getDomainEvents().forEach((event) => {
+      domainEventPublisher.publish(event);
+    });
+    book.clearDomainEvents();
   }
 
-  public async delete(bookId: BookId) {
+  public async delete(book: Book, domainEventPublisher: IDomainEventPublisher) {
     const client = this.clientManager.getClient();
 
     await client.book.delete({
       where: {
-        id: bookId.value,
+        id: book.id.value,
       },
     });
+
+    // ここでイベントをパブリッシュする
+    book.getDomainEvents().forEach((event) => {
+      domainEventPublisher.publish(event);
+    });
+    book.clearDomainEvents();
   }
 
   public async find(bookId: BookId): Promise<Book | null> {

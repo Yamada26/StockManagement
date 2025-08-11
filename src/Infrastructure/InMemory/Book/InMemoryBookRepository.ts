@@ -1,6 +1,6 @@
 import Book from 'Domain/models/Book/Book';
 import BookId from 'Domain/models/Book/BookId/BookId';
-import IBookRepository from 'Domain/models/Book/IBookRepository';
+import { IBookRepository } from 'Domain/models/Book/IBookRepository';
 
 export default class InMemoryBookRepository implements IBookRepository {
   private DB: {
